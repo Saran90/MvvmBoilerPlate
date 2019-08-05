@@ -8,11 +8,13 @@ import android.widget.Toast;
 import com.application.boilerplate.R;
 import com.application.boilerplate.BR;
 import com.application.boilerplate.ViewModelProviderFactory;
+import com.application.boilerplate.data.model.api.login.LoginResponse;
 import com.application.boilerplate.databinding.ActivityLoginBinding;
 import com.application.boilerplate.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 /**
@@ -78,5 +80,14 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         super.onCreate(savedInstanceState);
         mActivityLoginBinding = getViewDataBinding();
         mLoginViewModel.setNavigator(this);
+
+        mLoginViewModel.getLoginResponse().observe(this, new Observer<LoginResponse>() {
+            @Override
+            public void onChanged(LoginResponse loginResponse) {
+                Toast.makeText(LoginActivity.this,
+                        loginResponse.getRole(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -22,6 +22,10 @@ public class BaseAlert {
 
     private AlertDialog alertDialog;
 
+    public BaseAlert(){
+
+    }
+
     public void showAlert(Activity context, String title, String body, ButtonType type,
                           String positiveButtonText, String negativeButtonText,
                           DialogType dialogType,

@@ -14,6 +14,8 @@ import com.application.boilerplate.ui.login.LoginActivity;
 import com.application.boilerplate.utils.CommonUtils;
 import com.application.boilerplate.utils.NetworkUtils;
 
+import javax.inject.Inject;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +34,8 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
     // TODO
     // this can probably depend on isLoading variable of BaseViewModel,
     // since its going to be common for all the activities
-    private ProgressDialog mProgressDialog;
+    @Inject
+    public BaseAlert baseAlert;
     private T mViewDataBinding;
     private V mViewModel;
 
@@ -100,9 +103,7 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
     }
 
     public void hideLoading() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.cancel();
-        }
+        baseAlert.hideCustomProgressAlert();
     }
 
     public boolean isNetworkConnected() {
@@ -126,8 +127,8 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
     }
 
     public void showLoading() {
-        hideLoading();
-        mProgressDialog = CommonUtils.showLoadingDialog(this);
+        baseAlert.hideCustomProgressAlert();
+        baseAlert.showCustomProgressAlert(this);
     }
 
     private void performDataBinding() {
@@ -135,6 +136,12 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
         this.mViewModel = mViewModel == null ? getViewModel() : mViewModel;
         mViewDataBinding.setVariable(getBindingVariable(), mViewModel);
         mViewDataBinding.executePendingBindings();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideLoading();
     }
 }
 

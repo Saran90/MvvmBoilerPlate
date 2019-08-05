@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.application.boilerplate.data.DataManager;
 import com.application.boilerplate.data.model.api.login.LoginRequest;
+import com.application.boilerplate.data.model.api.login.LoginResponse;
 import com.application.boilerplate.data.remote.rx.SchedulerProvider;
 import com.application.boilerplate.ui.base.BaseViewModel;
 import com.application.boilerplate.utils.CommonUtils;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
+import androidx.lifecycle.MutableLiveData;
 import okhttp3.Credentials;
 
 /**
@@ -39,6 +41,8 @@ import okhttp3.Credentials;
  */
 
 public class LoginViewModel extends BaseViewModel<LoginNavigator> {
+
+    private MutableLiveData<LoginResponse> loginResponse;
 
     public LoginViewModel(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
@@ -58,6 +62,12 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
         return true;
     }
 
+    public MutableLiveData<LoginResponse> getLoginResponse() {
+        if (loginResponse==null)
+            loginResponse = new MutableLiveData<>();
+        return loginResponse;
+    }
+
     public void login(String username, String password) {
         setIsLoading(true);
         String auth = Credentials.basic("citta", "citta");
@@ -71,6 +81,7 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
                 .subscribe(response -> {
                     setIsLoading(false);
                     if (response.code()==200){
+                        loginResponse.setValue(response.body());
                         getNavigator().showMessage("Success!");
                         getDataManager().updateUserInfo(
                                 response.body().getAccessToken(),

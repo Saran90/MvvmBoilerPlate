@@ -35,6 +35,7 @@ import com.application.boilerplate.data.remote.rx.SchedulerProvider;
 import com.application.boilerplate.di.ApiInfo;
 import com.application.boilerplate.di.DatabaseInfo;
 import com.application.boilerplate.di.PreferenceInfo;
+import com.application.boilerplate.ui.base.BaseAlert;
 import com.application.boilerplate.utils.AppConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -136,6 +137,12 @@ public class AppModule {
         return new ApiHeader.ProtectedApiHeader(
                 preferencesHelper.getCurrentUserId(),
                 preferencesHelper.getToken());
+    }
+
+    @Provides
+    @Singleton
+    BaseAlert provideBaseAlert(){
+        return new BaseAlert();
     }
 
     @Provides
