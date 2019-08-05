@@ -82,7 +82,7 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
                     setIsLoading(false);
                     if (response.code()==200){
                         loginResponse.setValue(response.body());
-                        getNavigator().showMessage("Success!");
+//                        getNavigator().showMessage("Success!");
                         getDataManager().updateUserInfo(
                                 response.body().getAccessToken(),
                                 Long.valueOf(response.body().getUserId())

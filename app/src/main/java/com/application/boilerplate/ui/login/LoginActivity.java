@@ -21,7 +21,8 @@ import androidx.lifecycle.ViewModelProviders;
  * Created by SARAN M S on 26/07/19.
  */
 
-public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel> implements LoginNavigator {
+public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel> implements
+        LoginNavigator,Observer<LoginResponse> {
 
     @Inject
     ViewModelProviderFactory factory;
@@ -81,13 +82,13 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         mActivityLoginBinding = getViewDataBinding();
         mLoginViewModel.setNavigator(this);
 
-        mLoginViewModel.getLoginResponse().observe(this, new Observer<LoginResponse>() {
-            @Override
-            public void onChanged(LoginResponse loginResponse) {
-                Toast.makeText(LoginActivity.this,
-                        loginResponse.getRole(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        mLoginViewModel.getLoginResponse().observe(this,this::onChanged);
+    }
+
+    @Override
+    public void onChanged(LoginResponse loginResponse) {
+        Toast.makeText(LoginActivity.this,
+                loginResponse.getRole(),
+                Toast.LENGTH_SHORT).show();
     }
 }
