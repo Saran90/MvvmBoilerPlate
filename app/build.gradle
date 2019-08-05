@@ -131,6 +131,7 @@ dependencies {
     implementation "com.github.ybq:Android-SpinKit:$rootProject.spinKinProgressIndicator"
 
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitRxJavaAdapter"
+    implementation "com.squareup.retrofit2:converter-simplexml:$rootProject.retrofitVersion"
 }
 
 //configurations.all {

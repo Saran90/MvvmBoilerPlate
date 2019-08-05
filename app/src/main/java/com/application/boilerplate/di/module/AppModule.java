@@ -50,8 +50,12 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import com.application.boilerplate.R;
+
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.concurrent.TimeUnit;
 
@@ -152,12 +156,25 @@ public class AppModule {
                 preferencesHelper.getToken());
     }
 
+//    @Provides
+//    @Singleton
+//    Retrofit provideRetrofit(OkHttpClient okHttpClient){
+//        return new Retrofit.Builder()
+//                .baseUrl(BuildConfig.BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .client(okHttpClient)
+//                .build();
+//    }
+
     @Provides
     @Singleton
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(
+                        new Persister(new AnnotationStrategy() // important part!
+                        )))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
